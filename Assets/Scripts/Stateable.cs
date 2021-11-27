@@ -4,5 +4,7 @@ using UnityEngine;
 
 public interface Stateable
 {
-    public GameState GetState();
+    GameState GetState();
+
+    void SetState(GameState state);
 }
