@@ -10,17 +10,22 @@ public class Player : MonoBehaviour
     private Camera cam;
     public GameObject selectorTile;
     TileBase[] allTiles;
+    BoundsInt bounds;
+    TileBase[,] tiles;
 
     void Start()
     {
+        
+        cam = Camera.main;
         Tilemap tilemap = GameObject.Find("Colliders").GetComponent<Tilemap>();
 
-        BoundsInt bounds = tilemap.cellBounds;
+        bounds = tilemap.cellBounds;
         allTiles = tilemap.GetTilesBlock(bounds);
-
+        tiles = new TileBase[bounds.size.x,bounds.size.y];
         for (int x = 0; x < bounds.size.x; x++) {
             for (int y = 0; y < bounds.size.y; y++) {
                 TileBase tile = allTiles[x + y * bounds.size.x];
+                tiles[x,y] = tile;
                 if (tile != null) {
                     Debug.Log("x:" + x + " y:" + y + " tile:" + tile.name);
                 } else {
@@ -34,7 +39,15 @@ public class Player : MonoBehaviour
     {
         Vector3 point = GetCorrectedMousetoWorldPos();
         selectorTile.transform.position = point;
-        // if(allTiles[Mathf.Floor(point.x)][])
+        int y = (int) Mathf.Floor(tiles.GetLength(1)/2 + point.y);
+        int x = (int) Mathf.Floor(tiles.GetLength(0)/2 + point.x);
+        Debug.Log(tiles.GetLength(1)/2 + point.y);
+        Debug.Log(x + " | " + y);
+
+         if(tiles[x,y].name == "Full_Wall"){
+             Debug.Log("This is a  wall");
+         }
+        
     }
 
     private Vector3 GetMousetoWorldPos(){
